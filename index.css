@@ -59,3 +59,7 @@
 h3 {
     font-size: 40px;
 }
+
+#winner {
+    visibility: hidden;
+}

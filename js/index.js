@@ -28,8 +28,13 @@ let board = [
     },
 ];
 
-let isRoundFinished = false;
+//import { generateComputerMove, setMove, checkWinner, restartGame } from './gameLogic.mjs';
+//import { printMove, printWinner, showRestartButton } from './printToPage.mjs';
 
+let isRoundFinished = false;
+let isGameFinished = false;
+
+// FIRST MODULE
 const generateComputerMove = () => {
     let position;
     let isFreePosition = false;
@@ -51,6 +56,20 @@ const generateComputerMove = () => {
     return position;
 };
 
+const setMove = (move, isPlayer) => {
+    if (board[move].icon != "") {
+        return;
+    }
+
+    if (isPlayer) {
+        board[move].icon = "X";
+        printMove(move, true);
+    } else {
+        board[move].icon = "O";
+        printMove(move, false);
+    }
+};
+
 const checkWinner = (isPlayer) => {
     let symbol;
 
@@ -66,7 +85,8 @@ const checkWinner = (isPlayer) => {
             board[i + 1].icon == symbol &&
             board[i + 2].icon == symbol
         ) {
-            console.log("Winner: " + symbol);
+            printWinner(isPlayer);
+            isGameFinished = true;
         }
     }
 
@@ -76,33 +96,44 @@ const checkWinner = (isPlayer) => {
             board[i + 3].icon == symbol &&
             board[i + 6].icon == symbol
         ) {
-            console.log("Winner: " + symbol);
+            printWinner(isPlayer);
+            isGameFinished = true;
         }
     }
 
     if (
         (board[0].icon == symbol &&
             board[4].icon == symbol &&
-            board[8].icon == symbol) 
-            ||
+            board[8].icon == symbol) ||
         (board[2].icon == symbol &&
             board[4].icon == symbol &&
             board[6].icon == symbol)
     ) {
-        console.log("Winner: " + symbol);
+        printWinner(isPlayer);
+        isGameFinished = true;
     }
 
     return false;
 };
 
-const printResults = (isPlayer) => {};
+const restartGame = () => {
+    board.forEach(function (number) {
+        number.icon = "";
+    });
+    isRoundFinished = false;
+    isGameFinished = false;
 
-const showRestartButton = () => {
-    const restartButton = document.querySelector("button");
-    restartButton.style.visibility = "";
-    console.log(restartButton);
+    const moves = document.querySelectorAll("h3");
+
+    moves.forEach((element) => {
+        element.remove();
+    });
+
+    const winnerMessage = document.getElementById("winner");
+    winnerMessage.style.visibility = "hidden";
 };
 
+// SECOND MODULE
 const printMove = (move, isPlayer) => {
     const board = document.querySelector(".board");
     const position = board.children[move];
@@ -117,32 +148,46 @@ const printMove = (move, isPlayer) => {
     position.appendChild(symbol);
 };
 
-const setMoveToBoard = (move, isPlayer) => {
-    if (board[move].icon != "") {
+const printWinner = (isPlayer) => {
+    const winnerMessage = document.getElementById("winner");
+
+    if (isPlayer) {
+        winnerMessage.textContent = "YOU WIN!";
+        winnerMessage.style.visibility = "visible";
         return;
     }
 
-    if (isPlayer) {
-        board[move].icon = "X";
-        printMove(move, true);
-    } else {
-        board[move].icon = "O";
-        printMove(move, false);
-    }
-    
+    winnerMessage.textContent = "COMPUTER WIN!";
 };
 
+const showRestartButton = () => {
+    const restartButton = document.querySelector("button");
+    restartButton.style.visibility = "";
+};
+
+// MAIN MODULE
 const play = (playerMove) => {
     if (isRoundFinished) {
         return;
     }
     isRoundFinished = true;
-    showRestartButton();
 
-    setMoveToBoard(playerMove, true);
+    if (isGameFinished) {
+        showRestartButton();
+        return;
+    }
+
+    setMove(playerMove, true);
+    checkWinner(true);
+
+    if (isGameFinished) {
+        showRestartButton();
+        return;
+    }
 
     setTimeout(() => {
-        setMoveToBoard(generateComputerMove(), false);
+        setMove(generateComputerMove(), false);
+        checkWinner(false);
         isRoundFinished = false;
     }, 1000);
 };

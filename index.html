@@ -5,12 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Tic Tac Toe</title>
         <link rel="stylesheet" href="index.css" />
-        <script src="index.js"></script>
+        <script src="js/index.js"></script>
     </head>
     <body>
         <div id="layout">
             <div class="game-parameters">
-                <h2 id="result">YOU WIN!</h2>
+                <h2 id="winner">YOU WIN!</h2>
             </div>
             <div id="game">
                 <div class="board">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="game-parameters">
-                <button class="button">RESTART</button>
+                <button class="button" onclick="restartGame()">RESTART</button>
             </div>
         </div>
     </body>
