@@ -28,13 +28,9 @@ let board = [
     },
 ];
 
-//import { generateComputerMove, setMove, checkWinner, restartGame } from './gameLogic.mjs';
-//import { printMove, printWinner, showRestartButton } from './printToPage.mjs';
-
 let isRoundFinished = false;
 let isGameFinished = false;
 
-// FIRST MODULE
 const generateComputerMove = () => {
     let position;
     let isFreePosition = false;
@@ -133,7 +129,6 @@ const restartGame = () => {
     winnerMessage.style.visibility = "hidden";
 };
 
-// SECOND MODULE
 const printMove = (move, isPlayer) => {
     const board = document.querySelector(".board");
     const position = board.children[move];
@@ -165,7 +160,6 @@ const showRestartButton = () => {
     restartButton.style.visibility = "";
 };
 
-// MAIN MODULE
 const play = (playerMove) => {
     if (isRoundFinished) {
         return;
